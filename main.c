@@ -21,14 +21,13 @@ void ordenar(float vector[], int tam);
 float media(int qnt,int peso[],float notas[]);
 float acharMediaFinalDoRecurso(float nf,float mP,float mpr,float mT,float mtr);
 float acharMediaFinal(float mP,float mT);
-int validarPeso(int peso);
-float validarNota(float nota);
+
 int achaValorMaiProximo(float pontoDeAprox,float valores[],int t);
 
 
 
 void menu(){
-	printf("\n\t1-Cadastrar Aluno\n\t2-Imprimir pauta em ordem decrescente\n\t3-Imprimir pauta com estatistica\n\t0-Sair\n\nEscolha a opcao: ");
+	printf("\n\t1 - Cadastrar Alunos\n\t2 - Imprimir pauta em ordem decrescente\n\t3 - Imprimir pauta com estatistica\n\t0 - Sair\n\n\tDigite uma opcao: \t");
 }
 
 
@@ -178,10 +177,10 @@ float acharMediaFinal(float mP,float mT)
 }
 
 
-float validarNota(int numProva, char frase)
+float validarNota(int numProva, char frase[])
 {
 	float nota;
-	printf("Informe a Nota %s %d : ",frase,(numProva+1));
+	printf("Informe a Nota %s %d : ",frase,(numProva));
 	scanf("%f",&nota);
 	while(nota<0.0 || nota>20.0){
 		printf("Nota invalida!!,de estar [0;20], digite novamente: ");
@@ -191,10 +190,10 @@ float validarNota(int numProva, char frase)
 }
 
 
-int validarPeso(int numProva)
+int validarPeso(int numProva, char frase[])
 {
 	int peso;
-	printf("Informe o Peso da prova %d : ",(numProva+1));
+	printf("Informe o Peso %s %d : ",frase,(numProva+1));
 	scanf("%d",&peso);
 	while(peso<1 || peso>6){
 		printf("Peso invalido,deve estar [1;6], insira novamente: ");
@@ -238,8 +237,8 @@ int lerTotalDeProvasEProjectos(int opcao){
 }
 
 int lerNumeroDeEstudante(int num){
-	int numero;
-	printf("Informe o numero do estudante %d: ", num);
+	int numEstudante;
+	printf("Informe o numero do estudante %d: ", (num+1));
 	scanf("%d",&numEstudante);
 	while(numEstudante<0){
 		printf("Numero de estudante invalido!!, digite novamente: ");
@@ -250,19 +249,19 @@ int lerNumeroDeEstudante(int num){
 
 void cadastrarProvas(int numeroDaProva){
 	int contador;
-	char frase = "da Prova";
+	char frase[] = "da Prova";
 	for(contador=0;contador<numeroDaProva;contador++){
-		notasDasProvas[contador]=validarNota(numeroDaProva, frase);
-		pesoDasProvas[contador]=validarPeso(numeroDaProva, frase);
+		notasDasProvas[contador]=validarNota(contador+1, frase);
+		pesoDasProvas[contador]=validarPeso(contador+1, frase);
 	}
 }
 
 void cadastrarProjectos(int numeroDoProjecto){
 	int contador;
-	char frase = "do Projecto";
+	char frase[] = "do Projecto";
 	for( contador = 0 ; contador < numeroDoProjecto ; contador++ ){
-		notasDosProjectos[contador] = validarNota(numeroDoProjecto, frase);
-		pesoDosProJectos[contador] = validarNota(numeroDoProjecto, frase);
+		notasDosProjectos[contador] = validarNota(contador+1, frase);
+		pesoDosProJectos[contador] = validarNota(contador+1, frase);
 	}
 }
 
@@ -273,9 +272,9 @@ void lerAlunos(int numeroDeProvas, int numeroDeProjectos){
 		numeroDosAlunos[i]=lerNumeroDeEstudante(i);
 		cadastrarProvas(numeroDeProvas);
 		cadastrarProjectos(numeroDeProjectos);
-
+		system("clear");
 		// LIMPAR A TELA
-
+		/*
 		float mpr,mtr,mP=media(numeroDeProvas,pesoDasProvas,notasDasProvas);
 		float mT=media(numeroDeProjectos,pesoDosProJectos,notasDosProjectos);//m�dia do trabalho
 		mediaFinal[i]=acharMediaFinal(mP,mT);
@@ -311,7 +310,7 @@ void lerAlunos(int numeroDeProvas, int numeroDeProjectos){
 			mtr = (notasDosProjectos[MAXAVAL-1]*pesoDosProJectos[MAXAVAL-1])/peso;
 		}
 		mediaFinal[i]=acharMediaFinalDoRecurso(mediaFinal[i],mP,mpr,mT,mtr);
-	}	
+	}	*/
 	}
 }
 
@@ -330,6 +329,7 @@ void startGame(){
 	do{
 		menu();
 		scanf("%d",&opcao);
+		system("clear");
 		switch(opcao){
 			case 1:
 				//Cadastrar
@@ -337,18 +337,27 @@ void startGame(){
 				break;
 			case 2:
 				//Imprimir pauta em ordem decrescente
-				ordenar(mediaFinal,TAluno);
-				imprimir(TAluno);
+				if(TAluno<=0)
+					printf("\nERRO: nenhum Aluno registrado !!!!\n");
+				else{
+					ordenar(mediaFinal,TAluno);
+					imprimir(TAluno);
+				}
 				break;
 			case 3:
-				//Imprimir pauta com estatistica
-				imprimirEstatistica(TAluno);
+				//Imprimir pauta com estatística
+				if(TAluno<=0)
+					printf("\nERRO: nenhum Aluno registrado !!!!\n");
+				else{
+					imprimirEstatistica(TAluno);
+				}
 				break;
 			case 0:
-			//Sair
+				system("exit");
 			break;
 			default:
-				printf("Opcao invalida");
+				printf("-------------- Opcao invalida !!\n");
+				
 				break;
 		}
 	}while(opcao!=0);
